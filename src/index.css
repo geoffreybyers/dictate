@@ -1,0 +1,119 @@
+@import "@fontsource/inter";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark theme (default) — v1 tokens */
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --color-background: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-hover: #222222;
+  --color-border: #2a2a2a;
+  --color-border-focus: #3a3a3a;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #888888;
+  --color-text-muted: #555555;
+}
+
+/* Light theme — v2 spec, toggle via .light on root */
+.light {
+  --color-background: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f0f0f0;
+  --color-border: #e0e0e0;
+  --color-border-focus: #c8c8c8;
+  --color-text-primary: #111111;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Dropdown content: ensure readable text when portaled (theme-aware) */
+[data-radix-select-content] {
+  color: var(--color-text-primary);
+}
+[data-radix-select-item] {
+  color: var(--color-text-primary);
+}
+
+/* Focus ring for keyboard focus (accessibility) */
+:focus-visible {
+  outline: 2px solid #FFC53D;
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion: disable transitions when user prefers it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes panel-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .panel-enter {
+    animation: panel-enter 150ms ease-out forwards;
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-pulse-dot {
+    animation: pulse-dot 1s ease-in-out infinite;
+  }
+
+  .status-bar-shimmer::after {
+    content: "";
+    display: block;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.06),
+      transparent
+    );
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+}

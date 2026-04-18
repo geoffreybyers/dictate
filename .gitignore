@@ -1,0 +1,57 @@
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# Python
+.venv/
+sidecar/.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build artifacts
+# Note: we intentionally track a stub sidecar at
+# src-tauri/binaries/dictate-sidecar-x86_64-unknown-linux-gnu so `tauri dev`
+# doesn't complain about a missing externalBin. Real builds produced by
+# scripts/build-sidecar.sh should be ignored — match all other target triples:
+src-tauri/binaries/dictate-sidecar-*-apple-darwin
+src-tauri/binaries/dictate-sidecar-*-pc-windows-msvc*
+src-tauri/binaries/dictate-sidecar-*-unknown-linux-musl
+src-tauri/binaries/dictate-sidecar-aarch64-unknown-linux-gnu
+*.app/
+*.AppImage
+*.dmg
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test audio (keep scripts/sample_16k_mono.wav as a small test fixture)
+/test.wav
