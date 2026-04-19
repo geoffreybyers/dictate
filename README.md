@@ -6,7 +6,7 @@ A Python daemon with a Textual TUI for configuration, status, and history.
 
 ## Features
 
-- **Global push-to-talk hotkey** — `ctrl+shift+d` by default.
+- **Global push-to-talk hotkey** — `ctrl+shift+d` by default on X11, macOS, and Windows. On Wayland, bind `dictate toggle` in your desktop's keyboard settings (see [Wayland setup](#wayland-setup)).
 - **100% offline** — faster-whisper runs on-device (first run downloads the model).
 - **Auto-paste** — optional paste-at-cursor (X11/mac/Win: pynput; Wayland: ydotool).
 - **History** — scrollable list of past transcriptions.
@@ -32,6 +32,8 @@ dictate tui
 
 Hold `ctrl+shift+d` to record, release to transcribe. The transcription lands in your clipboard.
 
+> **Wayland users:** the in-process hotkey listener can't grab keys globally on Wayland. Follow [Wayland setup](#wayland-setup) to bind `dictate toggle` in your desktop environment instead. The `[hotkey]` block in `config.toml` has no effect on Wayland.
+
 ## Commands
 
 | Command | What it does |
@@ -50,7 +52,12 @@ Structural changes (model size, device, compute type, mic) require a daemon rest
 
 ## Wayland setup
 
-Wayland compositors don't expose a universal global-hotkey API, so you bind `dictate toggle` manually in your compositor's keyboard settings.
+Wayland doesn't allow applications to grab keys globally — that's a security feature of the protocol. So the daemon's own hotkey listener is a no-op on Wayland, and the `[hotkey]` block in `config.toml` is ignored. Instead, bind `dictate toggle` in your desktop environment's keyboard settings: the DE receives the key and invokes the CLI, which signals the daemon via SIGUSR1.
+
+**GNOME:** Settings → Keyboard → View and Customize Shortcuts → Custom Shortcuts → Add
+- Name: `Dictate toggle`
+- Command: `dictate toggle` (or the absolute path, e.g. `/home/you/.local/bin/dictate toggle`)
+- Shortcut: Ctrl+Shift+D (or whatever you prefer)
 
 **KDE Plasma:** System Settings → Shortcuts → Add Application → Command: `dictate toggle`
 
@@ -62,9 +69,9 @@ bindsym ctrl+shift+d exec dictate toggle
 # bindsym --release ctrl+shift+d exec dictate stop
 ```
 
-**GNOME:** Settings → Keyboard → Custom Shortcuts → Add: Command: `dictate toggle`
-
 Auto-paste on Wayland requires `ydotool` + `ydotoold`. See the systemd unit example in [DEBUGGING.md](DEBUGGING.md).
+
+> **Tip:** if you installed via `pipx`/`pip --user`, the binary is at `~/.local/bin/dictate`. If you're running from a project venv, use the full path to `<project>/.venv/bin/dictate` — DE shortcut commands don't inherit your shell's PATH.
 
 ## Run at login (systemd)
 
