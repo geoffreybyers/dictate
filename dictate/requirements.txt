@@ -1,5 +1,0 @@
-faster-whisper
-sounddevice
-numpy
-pynput
-pyperclip

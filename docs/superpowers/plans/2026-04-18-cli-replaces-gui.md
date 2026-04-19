@@ -29,7 +29,7 @@ git checkout -b rebuild/python-tui
 - Delete: `src/`, `src-tauri/`, `sidecar/`, `dist/`, `public/`, `node_modules/`, `index.html`, `package.json`, `package-lock.json`, `vite.config.ts`, `tsconfig.json`, `tsconfig.node.json`, `tailwind.config.js`, `postcss.config.js`, `scripts/build-sidecar.sh`, `UI_SPEC.md`, the existing `dictate/` contents
 - Create: `dictate/__init__.py`, `dictate/tui/__init__.py`, `tests/__init__.py`, `tests/unit/__init__.py`, `tests/integration/__init__.py`, `tests/tui/__init__.py`
 
-- [ ] **Step 1: Delete old scaffolding**
+- [x] **Step 1: Delete old scaffolding**
 
 ```bash
 rm -rf src src-tauri sidecar dist public node_modules
@@ -38,7 +38,7 @@ rm -f scripts/build-sidecar.sh
 rm -rf dictate
 ```
 
-- [ ] **Step 2: Create empty Python package structure**
+- [x] **Step 2: Create empty Python package structure**
 
 ```bash
 mkdir -p dictate/tui tests/unit tests/integration tests/tui
@@ -54,7 +54,7 @@ Put a package docstring in `dictate/__init__.py`:
 __version__ = "2.0.0.dev0"
 ```
 
-- [ ] **Step 3: Update .gitignore for Python**
+- [x] **Step 3: Update .gitignore for Python**
 
 Replace the Node/Rust entries in `.gitignore` with Python entries:
 
@@ -81,7 +81,7 @@ htmlcov/
 
 Keep pre-existing entries that still apply (e.g., OS files, editor).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add -A
