@@ -72,3 +72,78 @@ class HotkeyState:
     def _stop(self) -> None:
         self._recording = False
         self._on_stop()
+
+
+# --- pynput wiring -----------------------------------------------------------
+
+try:
+    from pynput import keyboard  # type: ignore
+except Exception:  # pragma: no cover — env without display
+    keyboard = None
+
+
+_KEY_ALIASES = {
+    "ctrl_l": "ctrl", "ctrl_r": "ctrl",
+    "shift_l": "shift", "shift_r": "shift",
+    "alt_l": "alt", "alt_r": "alt", "alt_gr": "alt",
+    "cmd_l": "cmd", "cmd_r": "cmd", "cmd": "cmd",
+}
+
+
+def _key_name(key) -> str | None:
+    """Normalize a pynput key/keycode to the names used in parse_binding."""
+    # KeyCode (printable)
+    char = getattr(key, "char", None)
+    if char:
+        return char.lower()
+    name = getattr(key, "name", None)
+    if not name:
+        return None
+    return _KEY_ALIASES.get(name.lower(), name.lower())
+
+
+class HotkeyListener:
+    """Listens for the configured combo using pynput; drives HotkeyState."""
+
+    def __init__(self, binding: str, mode: Mode,
+                 on_start, on_stop):
+        self._target = parse_binding(binding)
+        self._state = HotkeyState(mode, on_start=on_start, on_stop=on_stop)
+        self._pressed: set[str] = set()
+        self._combo_active = False
+        self._listener = None
+
+    def start(self) -> None:
+        if keyboard is None:
+            raise RuntimeError("pynput.keyboard unavailable")
+        self._listener = keyboard.Listener(
+            on_press=self._on_press,
+            on_release=self._on_release,
+        )
+        self._listener.start()
+
+    def stop(self) -> None:
+        if self._listener:
+            self._listener.stop()
+            self._listener = None
+
+    def external_toggle(self) -> None:
+        self._state.external_toggle()
+
+    def _on_press(self, key):
+        name = _key_name(key)
+        if name is None:
+            return
+        self._pressed.add(name)
+        if not self._combo_active and self._target.issubset(self._pressed):
+            self._combo_active = True
+            self._state.on_combo_press()
+
+    def _on_release(self, key):
+        name = _key_name(key)
+        if name is None:
+            return
+        self._pressed.discard(name)
+        if self._combo_active and not self._target.issubset(self._pressed):
+            self._combo_active = False
+            self._state.on_combo_release()

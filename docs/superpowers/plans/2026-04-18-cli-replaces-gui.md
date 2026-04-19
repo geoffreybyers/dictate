@@ -1741,7 +1741,7 @@ git commit -m "feat(clipboard): pyperclip wrapper with graceful failure"
 - Modify: `dictate/hotkey.py` (add `HotkeyListener`)
 - Test: `tests/unit/test_hotkey_listener.py`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```python
 # tests/unit/test_hotkey_listener.py
@@ -1789,13 +1789,13 @@ def _make_key(kb_mock, name):
     return k
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_hotkey_listener.py -v
 ```
 
-- [ ] **Step 3: Extend `dictate/hotkey.py` with `HotkeyListener`**
+- [x] **Step 3: Extend `dictate/hotkey.py` with `HotkeyListener`**
 
 Append below the `HotkeyState` class:
 
@@ -1875,13 +1875,13 @@ class HotkeyListener:
             self._state.on_combo_release()
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_hotkey_listener.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/hotkey.py tests/unit/test_hotkey_listener.py
