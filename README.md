@@ -1,129 +1,95 @@
 # dictate
 
-**Privacy-first, offline speech-to-text for your desktop.** Hold a global hotkey, speak, release — your words are transcribed locally via [faster-whisper](https://github.com/SYSTRAN/faster-whisper) and copied to the clipboard. No audio or text ever leaves your machine.
+**Offline, privacy-first speech-to-text for your terminal.** Hold a global hotkey, speak, release — your words are transcribed locally via [faster-whisper](https://github.com/SYSTRAN/faster-whisper) and copied to your clipboard. Nothing leaves your machine.
 
-![status: early development](https://img.shields.io/badge/status-early%20development-orange)
-![license: MIT](https://img.shields.io/badge/license-MIT-blue)
-
----
+A Python daemon with a Textual TUI for configuration, status, and history.
 
 ## Features
 
-- **Global push-to-talk hotkey** — hold, speak, release. Works from any app.
-- **100% local** — audio is captured, transcribed, and discarded on your machine. Nothing is sent to any server.
-- **Whisper, offline** — first run downloads the model; after that, you're fully offline.
-- **Auto-paste** (optional) — paste the transcription directly at the cursor instead of just copying.
-- **Transcription history** — revisit, copy, or delete past transcriptions.
-- **CPU or NVIDIA CUDA** — picks the fastest backend available and falls back gracefully.
-- **X11 and Wayland** on Linux, with a dedicated portal / GNOME fallback for global hotkeys.
+- **Global push-to-talk hotkey** — `ctrl+shift+d` by default.
+- **100% offline** — faster-whisper runs on-device (first run downloads the model).
+- **Auto-paste** — optional paste-at-cursor (X11/mac/Win: pynput; Wayland: ydotool).
+- **History** — scrollable list of past transcriptions.
+- **TUI for everything else** — `dictate tui` opens a terminal UI with live status, settings, and history.
 
-## Platform support
-
-| Platform | Status | Notes |
-|---|---|---|
-| Linux X11 | ✅ Primary development target | Global hotkey via `tauri-plugin-global-shortcut` |
-| Linux Wayland (GNOME) | ✅ | Uses `gsettings` fallback — hotkey is toggle-only (press to start, press to stop). Requires `ydotool` for auto-paste. |
-| Linux Wayland (KDE, Sway) | ✅ | Uses XDG GlobalShortcuts portal (push-to-talk on portal v2 compositors). Requires `ydotool` for auto-paste. |
-| macOS | 🟡 Experimental | Requires Microphone + Accessibility permissions. Not actively tested. |
-| Windows | 🟡 Experimental | Requires Visual C++ Redistributable. Not actively tested. |
-
-## Requirements
-
-- **Node.js** 20+
-- **Rust** stable (current toolchain)
-- **Python** 3.11+ for the sidecar
-- **System audio library** — Linux: `libportaudio2` (`sudo apt install libportaudio2`)
-- **Optional CUDA** — NVIDIA GPU with a recent CUDA runtime for faster inference
-- **Optional (Wayland)** — `ydotool` + `ydotoold` for auto-paste
-
-## Quick start (from source)
-
-There are two processes: the Tauri app and the Python sidecar. In development you run them separately.
+## Install
 
 ```bash
-# 1. Clone
-git clone https://github.com/geoffreybyers/dictate.git
-cd dictate
-
-# 2. Install frontend + Tauri deps
-npm install
-
-# 3. Install sidecar Python deps
-cd sidecar
-python3 -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cd ..
-
-# 4. Run (launches both — Tauri spawns the sidecar)
-npm run tauri dev
+pipx install dictate    # or: pip install --user dictate
 ```
 
-The first launch downloads a Whisper model (~500 MB for `small`, ~1.5 GB for `medium`) into the app config directory. Subsequent launches are fully offline.
+Requires Python 3.11+ and `libportaudio2` on Linux.
 
-## Production build
+## Quick start
 
 ```bash
-# 1. Package the Python sidecar as a single binary
-./scripts/build-sidecar.sh
+# Run the daemon in one terminal (Ctrl+C to stop)
+dictate
 
-# 2. Build the Tauri bundle
-npm run tauri build
+# In another terminal, open the config TUI
+dictate tui
 ```
 
-The bundled sidecar is placed at `src-tauri/binaries/dictate-sidecar` and embedded in the Tauri output. Prebuilt release binaries (AppImage, `.deb`, etc.) are planned but not yet published — for now, build from source.
+Hold `ctrl+shift+d` to record, release to transcribe. The transcription lands in your clipboard.
 
-## Linux / Wayland setup
+## Commands
 
-### Global hotkey
+| Command | What it does |
+|---|---|
+| `dictate` | Run the daemon (foreground). |
+| `dictate tui` | Open the Textual TUI (requires a running daemon). |
+| `dictate toggle` | Send SIGUSR1 — toggle recording. For Wayland compositor bindings. |
+| `dictate start` / `dictate stop` | Same signal; for Sway/i3 `bindsym --release` pairs. |
+| `dictate --version` | Print version. |
 
-Global hotkeys on Wayland go through one of two backends, chosen automatically at startup. The app surfaces which one is active in the settings panel:
+## Configuration
 
-- **XDG GlobalShortcuts portal** — KDE Plasma 6+, Sway with `xdg-desktop-portal-wlr`, or sandboxed GNOME. The compositor prompts you to confirm the binding. On portal v2 compositors you get true push-to-talk.
-- **GNOME `gsettings` fallback** — unsandboxed GNOME. Registers a custom keyboard shortcut under *Settings → Keyboard → Custom Shortcuts* as "Dictate toggle". GNOME only delivers key-press events, so the hotkey is **toggle mode** — press once to start, press again to stop.
+The daemon reads `~/.config/dictate/config.toml`. On first run it writes a fully-commented default. Edit by hand or use `dictate tui`. Changes take effect on `SIGHUP` (the TUI sends this automatically on save).
 
-### Auto-paste
+Structural changes (model size, device, compute type, mic) require a daemon restart — the TUI prompts you.
 
-On X11, auto-paste uses the built-in `rdev` simulator. On Wayland there is no cross-compositor virtual-keyboard protocol, so dictate shells out to [`ydotool`](https://github.com/ReimuNotMoe/ydotool). One-time setup:
+## Wayland setup
 
-```bash
-sudo apt install ydotool ydotoold      # Debian/Ubuntu — substitute for other distros
+Wayland compositors don't expose a universal global-hotkey API, so you bind `dictate toggle` manually in your compositor's keyboard settings.
 
-# If /dev/uinput isn't already accessible:
-# sudo setfacl -m u:$USER:rw /dev/uinput
+**KDE Plasma:** System Settings → Shortcuts → Add Application → Command: `dictate toggle`
 
-# Enable the user daemon:
-cat > ~/.config/systemd/user/ydotoold.service <<'EOF'
+**Sway / Hyprland:** add to config:
+```
+bindsym ctrl+shift+d exec dictate toggle
+# For true push-to-talk (Sway):
+# bindsym ctrl+shift+d exec dictate start
+# bindsym --release ctrl+shift+d exec dictate stop
+```
+
+**GNOME:** Settings → Keyboard → Custom Shortcuts → Add: Command: `dictate toggle`
+
+Auto-paste on Wayland requires `ydotool` + `ydotoold`. See the systemd unit example in [DEBUGGING.md](DEBUGGING.md).
+
+## Run at login (systemd)
+
+```ini
+# ~/.config/systemd/user/dictate.service
 [Unit]
-Description=ydotool user daemon (virtual input for Wayland auto-paste)
+Description=dictate — offline speech-to-text daemon
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/ydotoold --socket-path=%t/.ydotool_socket --socket-own=%U:%G
+ExecStart=%h/.local/bin/dictate
 Restart=on-failure
 RestartSec=2
 
 [Install]
 WantedBy=default.target
-EOF
-
-systemctl --user daemon-reload
-systemctl --user enable --now ydotoold.service
 ```
 
-If `ydotoold` isn't running, auto-paste silently falls back to clipboard-only — the text is copied, you just paste it yourself.
+```bash
+systemctl --user enable --now dictate
+```
 
-## Also in this repo
+## Architecture
 
-- **`dictate/`** — the original standalone Python CLI that predates the desktop app. Kept for users who prefer a terminal tool. See [`dictate/README.md`](dictate/README.md).
-
-## Documentation
-
-- [ARCHITECTURE.md](ARCHITECTURE.md) — process model, Tauri ↔ sidecar WebSocket protocol, Linux hotkey backend selection.
-- [UI_SPEC.md](UI_SPEC.md) — window layout, nav structure, per-screen settings.
-- [DEBUGGING.md](DEBUGGING.md) — logs, DevTools, verbose flags.
-- [CONTRIBUTING.md](CONTRIBUTING.md) — how to propose changes.
-- [SECURITY.md](SECURITY.md) — reporting vulnerabilities; privacy posture.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design. TL;DR: one Python daemon + one Textual TUI, sharing state via files in XDG dirs + POSIX signals.
 
 ## License
 
