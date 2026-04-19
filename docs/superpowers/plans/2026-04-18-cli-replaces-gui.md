@@ -3691,7 +3691,7 @@ git commit -m "docs: update DEBUGGING/CONTRIBUTING/SECURITY for Python stack"
 - Modify: `pyproject.toml` (final metadata pass), `LICENSE` (verify unchanged)
 - New: `MANIFEST.in` if needed
 
-- [ ] **Step 1: Add PyPI metadata to pyproject.toml**
+- [x] **Step 1: Add PyPI metadata to pyproject.toml**
 
 Edit `[project]` section — add keywords, classifiers, urls:
 
@@ -3719,7 +3719,7 @@ Homepage = "https://github.com/geoffreybyers/dictate"
 Issues = "https://github.com/geoffreybyers/dictate/issues"
 ```
 
-- [ ] **Step 2: Build a wheel locally to verify**
+- [x] **Step 2: Build a wheel locally to verify**
 
 ```bash
 .venv/bin/pip install build
@@ -3729,7 +3729,7 @@ ls dist/
 
 Expected: `dist/dictate-2.0.0.dev0-py3-none-any.whl` exists.
 
-- [ ] **Step 3: Install the wheel fresh in a throwaway venv and run `--version`**
+- [x] **Step 3: Install the wheel fresh in a throwaway venv and run `--version`**
 
 ```bash
 python3 -m venv /tmp/dictate-smoketest
@@ -3745,7 +3745,7 @@ Clean up:
 rm -rf /tmp/dictate-smoketest dist build dictate.egg-info
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add pyproject.toml
