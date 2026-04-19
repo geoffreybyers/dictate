@@ -2207,7 +2207,7 @@ git commit -m "feat(daemon): main loop, signal handlers, transcription orchestra
 - Create: `dictate/cli.py`, `dictate/__main__.py`
 - Test: `tests/unit/test_cli.py`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/unit/test_cli.py
@@ -2242,7 +2242,9 @@ def test_dictate_toggle_sends_sigusr1(tmp_path, monkeypatch):
     pid_file.write_text(f"{os.getpid()}\n{int(0)}\n")
     with patch("dictate.cli.os.kill") as k:
         rc = main(["toggle"])
-        k.assert_called_once_with(os.getpid(), signal.SIGUSR1)
+        # _read_pid() calls os.kill(pid, 0) for liveness; _signal_daemon() then
+        # sends SIGUSR1. Mock sees both calls — check the last one was the signal.
+        k.assert_called_with(os.getpid(), signal.SIGUSR1)
         assert rc == 0
 
 
@@ -2262,13 +2264,13 @@ def test_dictate_tui_no_daemon_errors(tmp_path, monkeypatch, capsys):
     assert "no" in captured.err.lower() and "daemon" in captured.err.lower()
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_cli.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/cli.py`**
+- [x] **Step 3: Implement `dictate/cli.py`**
 
 ```python
 """CLI dispatch. `dictate` alone = daemon; subcommands for TUI, signals."""
@@ -2349,7 +2351,7 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **Step 4: Write `dictate/__main__.py`**
+- [x] **Step 4: Write `dictate/__main__.py`**
 
 ```python
 """Allow `python -m dictate` as a daemon alias."""
@@ -2360,7 +2362,7 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **Step 5: Stub `dictate/tui/app.py` for CLI import** (fully implemented in Task 16)
+- [x] **Step 5: Stub `dictate/tui/app.py` for CLI import** (fully implemented in Task 16)
 
 ```python
 # dictate/tui/app.py
@@ -2368,13 +2370,13 @@ def run_tui() -> int:
     raise NotImplementedError("TUI implemented in Task 16+")
 ```
 
-- [ ] **Step 6: Run tests — expect PASS**
+- [x] **Step 6: Run tests — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_cli.py -v
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add dictate/cli.py dictate/__main__.py dictate/tui/app.py tests/unit/test_cli.py
