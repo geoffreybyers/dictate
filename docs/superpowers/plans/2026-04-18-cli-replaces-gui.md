@@ -850,7 +850,7 @@ git commit -m "feat(log): rotating file logger configured at startup"
 
 This task implements the pure logic (modifier parsing, mode state machine). Task 13 wires pynput in.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/unit/test_hotkey.py
@@ -924,13 +924,13 @@ def test_external_toggle_works_regardless_of_mode():
     assert stopped == [1]
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_hotkey.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/hotkey.py`**
+- [x] **Step 3: Implement `dictate/hotkey.py`**
 
 ```python
 """Hotkey binding parser + mode state machine. pynput wiring lives in Task 13."""
@@ -1009,13 +1009,13 @@ class HotkeyState:
         self._on_stop()
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_hotkey.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/hotkey.py tests/unit/test_hotkey.py
