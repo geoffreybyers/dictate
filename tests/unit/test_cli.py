@@ -1,8 +1,16 @@
 import os
 import signal
+import sys
 from pathlib import Path
 from unittest.mock import patch
+
+import pytest
+
 from dictate.cli import main
+
+_posix_only = pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX-only signals (SIGUSR1)"
+)
 
 
 def test_dictate_no_args_runs_daemon():
@@ -21,6 +29,7 @@ def test_dictate_version(capsys):
     assert rc == 0
 
 
+@_posix_only
 def test_dictate_toggle_sends_sigusr1(tmp_path, monkeypatch):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
     pid_dir = tmp_path / "dictate"
@@ -35,6 +44,7 @@ def test_dictate_toggle_sends_sigusr1(tmp_path, monkeypatch):
         assert rc == 0
 
 
+@_posix_only
 def test_dictate_toggle_no_daemon_errors(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
     rc = main(["toggle"])

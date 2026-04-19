@@ -1,10 +1,19 @@
 """We test the daemon's orchestration in isolation by mocking its hardware-facing
 components. Full integration tests live in tests/integration."""
+import sys
 from unittest.mock import MagicMock, patch
 from pathlib import Path
+
+import pytest
+
 from dictate.config import Config
 
+_posix_only = pytest.mark.skipif(
+    sys.platform == "win32", reason="Daemon uses POSIX-only signals (SIGHUP/SIGUSR1)"
+)
 
+
+@_posix_only
 def test_daemon_wires_components_and_writes_pid(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))
@@ -24,6 +33,7 @@ def test_daemon_wires_components_and_writes_pid(tmp_path: Path, monkeypatch):
         HK.assert_called_once()
 
 
+@_posix_only
 def test_sigusr1_forwards_to_external_toggle(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))

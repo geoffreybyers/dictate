@@ -1,7 +1,25 @@
+import sys
+import types
 from unittest.mock import patch, MagicMock
 import pytest
 from dictate.paste import paste, select_backend, WaylandYdotoolBackend, PynputBackend
 from dictate.errors import PasteUnavailableError
+
+
+@pytest.fixture(autouse=True)
+def _stub_pynput_keyboard(monkeypatch):
+    # Real pynput eagerly loads a platform backend at import time (xorg on Linux),
+    # which fails on headless CI. Stub the module so these tests exercise only
+    # dictate.paste's logic.
+    fake_keyboard = types.ModuleType("pynput.keyboard")
+    fake_keyboard.Controller = MagicMock
+    fake_keyboard.Key = types.SimpleNamespace(
+        ctrl="ctrl", shift="shift", alt="alt", cmd="cmd"
+    )
+    fake_pynput = types.ModuleType("pynput")
+    fake_pynput.keyboard = fake_keyboard
+    monkeypatch.setitem(sys.modules, "pynput", fake_pynput)
+    monkeypatch.setitem(sys.modules, "pynput.keyboard", fake_keyboard)
 
 
 def test_select_backend_wayland_picks_ydotool():

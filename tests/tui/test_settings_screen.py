@@ -1,5 +1,6 @@
 import os
 import signal
+import sys
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,6 +10,7 @@ from dictate.tui.app import DictateTUI
 from dictate.tui.settings import SettingsScreen
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX-only SIGHUP")
 @pytest.mark.asyncio
 async def test_settings_edit_and_save_sends_sighup(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
