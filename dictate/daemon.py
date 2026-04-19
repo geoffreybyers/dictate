@@ -175,6 +175,9 @@ class Daemon:
             uptime_s=self._state.uptime_s(),
             model_loaded=self._transcriber is not None,
             needs_restart=self._needs_restart,
+            device=self._transcriber.device if self._transcriber else None,
+            compute_type=self._transcriber.compute_type if self._transcriber else None,
+            model_notice=self._transcriber.last_error if self._transcriber else None,
         )
         self._state.write_status(snap)
 

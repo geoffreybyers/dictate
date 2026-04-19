@@ -28,6 +28,14 @@ def _resolve_compute_type(device: str, requested: str) -> str:
     return "float16" if device == "cuda" else "int8"
 
 
+def _cuda_available() -> bool:
+    try:
+        import ctranslate2
+        return ctranslate2.get_cuda_device_count() > 0
+    except Exception:
+        return False
+
+
 class Transcriber:
     def __init__(
         self,
@@ -36,24 +44,38 @@ class Transcriber:
         compute_type: str = "auto",
         cache_dir: Optional[Path] = None,
     ):
+        self.last_error: Optional[str] = None
         if device == "auto":
-            try:
-                import ctranslate2
-                device = "cuda" if "cuda" in ctranslate2.get_supported_devices() else "cpu"
-            except Exception:
-                device = "cpu"
-        compute_type = _resolve_compute_type(device, compute_type)
+            device = "cuda" if _cuda_available() else "cpu"
+        resolved_compute = _resolve_compute_type(device, compute_type)
         log.info("loading whisper model size=%s device=%s compute_type=%s",
-                 size, device, compute_type)
-        self._model = WhisperModel(
-            size,
-            device=device,
-            compute_type=compute_type,
-            download_root=str(cache_dir) if cache_dir else None,
-        )
+                 size, device, resolved_compute)
+        download_root = str(cache_dir) if cache_dir else None
+        try:
+            self._model = WhisperModel(
+                size,
+                device=device,
+                compute_type=resolved_compute,
+                download_root=download_root,
+            )
+        except Exception as e:
+            if device == "cuda":
+                msg = f"CUDA init failed, fell back to CPU: {e}"
+                log.warning(msg)
+                self.last_error = msg
+                device = "cpu"
+                resolved_compute = _resolve_compute_type(device, compute_type)
+                self._model = WhisperModel(
+                    size,
+                    device=device,
+                    compute_type=resolved_compute,
+                    download_root=download_root,
+                )
+            else:
+                raise
         self.size = size
         self.device = device
-        self.compute_type = compute_type
+        self.compute_type = resolved_compute
 
     def transcribe(self, audio: np.ndarray) -> TranscriptionResult:
         if audio.size == 0:

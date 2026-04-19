@@ -13,6 +13,7 @@ def test_daemon_wires_components_and_writes_pid(tmp_path: Path, monkeypatch):
     with patch("dictate.daemon.Transcriber") as T, \
          patch("dictate.daemon.Recorder") as R, \
          patch("dictate.daemon.HotkeyListener") as HK:
+        T.return_value = MagicMock(device="cpu", compute_type="int8", last_error=None)
         from dictate.daemon import Daemon
         d = Daemon(cfg=Config())
         d.setup()
@@ -28,9 +29,10 @@ def test_sigusr1_forwards_to_external_toggle(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))
     monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path / "data"))
 
-    with patch("dictate.daemon.Transcriber"), \
+    with patch("dictate.daemon.Transcriber") as T, \
          patch("dictate.daemon.Recorder"), \
          patch("dictate.daemon.HotkeyListener") as HK:
+        T.return_value = MagicMock(device="cpu", compute_type="int8", last_error=None)
         hk_instance = MagicMock()
         HK.return_value = hk_instance
         from dictate.daemon import Daemon

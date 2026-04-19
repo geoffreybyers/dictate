@@ -16,12 +16,20 @@ class StatusScreen(Widget):
     StatusScreen { padding: 1 2; }
     #status-state { text-style: bold; content-align: center middle; height: 5; }
     #status-info { margin-top: 1; }
+    #status-model { margin-top: 1; }
+    #status-notice { margin-top: 1; color: $warning; }
+    #status-restart { margin-top: 1; color: $warning; text-style: bold; }
+    #status-error { margin-top: 1; color: $error; }
     """
 
     def compose(self):
         yield Vertical(
             Static("", id="status-state"),
             Static("", id="status-info"),
+            Static("", id="status-model"),
+            Static("", id="status-restart"),
+            Static("", id="status-notice"),
+            Static("", id="status-error"),
         )
 
     def on_mount(self) -> None:
@@ -32,7 +40,9 @@ class StatusScreen(Widget):
         path = paths.cache_dir() / "status.json"
         if not path.exists():
             self.query_one("#status-state", Static).update("(no daemon running)")
-            self.query_one("#status-info", Static).update("")
+            for wid in ("#status-info", "#status-model", "#status-restart",
+                        "#status-notice", "#status-error"):
+                self.query_one(wid, Static).update("")
             return
         try:
             data = json.loads(path.read_text())
@@ -46,3 +56,14 @@ class StatusScreen(Widget):
             f"queue: {data.get('queue_depth')}",
         ]
         self.query_one("#status-info", Static).update(" · ".join(info))
+        device = data.get("device") or "?"
+        compute = data.get("compute_type") or "?"
+        self.query_one("#status-model", Static).update(f"model: {device} / {compute}")
+        needs_restart = bool(data.get("needs_restart"))
+        self.query_one("#status-restart", Static).update(
+            "⟳ config changed — restart daemon to apply" if needs_restart else ""
+        )
+        notice = data.get("model_notice") or ""
+        self.query_one("#status-notice", Static).update(f"⚠ {notice}" if notice else "")
+        err = data.get("last_error") or ""
+        self.query_one("#status-error", Static).update(f"error: {err}" if err else "")

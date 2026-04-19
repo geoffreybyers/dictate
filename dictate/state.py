@@ -20,6 +20,9 @@ class StatusSnapshot:
     uptime_s: int
     model_loaded: bool = False
     needs_restart: bool = False
+    device: Optional[str] = None
+    compute_type: Optional[str] = None
+    model_notice: Optional[str] = None
 
 
 @dataclass

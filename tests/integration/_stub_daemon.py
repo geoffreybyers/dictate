@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 from dictate import daemon as D
 
 # Replace hardware components with MagicMocks
-D.Transcriber = lambda *a, **kw: MagicMock()
+D.Transcriber = lambda *a, **kw: MagicMock(device="cpu", compute_type="int8", last_error=None)
 D.Recorder = lambda *a, **kw: MagicMock(start=lambda: None,
                                         stop=lambda: __import__("numpy").zeros(0))
 # Keep HotkeyListener but skip pynput:
