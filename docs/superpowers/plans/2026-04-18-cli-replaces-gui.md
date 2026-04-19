@@ -1898,7 +1898,7 @@ git commit -m "feat(hotkey): pynput listener drives HotkeyState machine"
 - Create: `dictate/daemon.py`, `dictate/paths.py`
 - Test: `tests/unit/test_daemon.py`
 
-- [ ] **Step 1: Implement `dictate/paths.py` (XDG helpers)**
+- [x] **Step 1: Implement `dictate/paths.py` (XDG helpers)**
 
 ```python
 # dictate/paths.py
@@ -1932,7 +1932,7 @@ def log_path() -> Path:
     return data_dir() / "dictate.log"
 ```
 
-- [ ] **Step 2: Write failing test for the daemon orchestration**
+- [x] **Step 2: Write failing test for the daemon orchestration**
 
 ```python
 # tests/unit/test_daemon.py
@@ -1978,13 +1978,13 @@ def test_sigusr1_forwards_to_external_toggle(tmp_path: Path, monkeypatch):
         hk_instance.external_toggle.assert_called_once()
 ```
 
-- [ ] **Step 3: Run — expect failure**
+- [x] **Step 3: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_daemon.py -v
 ```
 
-- [ ] **Step 4: Implement `dictate/daemon.py`**
+- [x] **Step 4: Implement `dictate/daemon.py`**
 
 ```python
 """Daemon: model load, hotkey listener, queue, signal handlers. Foreground process."""
@@ -2186,13 +2186,13 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **Step 5: Run — expect PASS**
+- [x] **Step 5: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_daemon.py -v
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add dictate/daemon.py dictate/paths.py tests/unit/test_daemon.py
