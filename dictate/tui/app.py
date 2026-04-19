@@ -48,18 +48,14 @@ class DictateTUI(App):
         # Remove all existing children
         for child in list(content.children):
             await child.remove()
-        try:
-            if name == "status":
-                content.mount(StatusScreen(id="screen-body"))
-            elif name == "settings":
-                from dictate.tui.settings import SettingsScreen
-                content.mount(SettingsScreen(id="screen-body"))
-            elif name == "history":
-                from dictate.tui.history import HistoryScreen
-                content.mount(HistoryScreen(id="screen-body"))
-        except ImportError:
-            # Screen not yet implemented (tasks 18-19 pending).
-            content.mount(Static(f"(screen: {name} — not yet implemented)", id="screen-body"))
+        if name == "status":
+            content.mount(StatusScreen(id="screen-body"))
+        elif name == "settings":
+            from dictate.tui.settings import SettingsScreen
+            content.mount(SettingsScreen(id="screen-body"))
+        elif name == "history":
+            from dictate.tui.history import HistoryScreen
+            content.mount(HistoryScreen(id="screen-body"))
 
 
 def run_tui() -> int:

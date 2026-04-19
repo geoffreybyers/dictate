@@ -2945,7 +2945,7 @@ git commit -m "feat(tui): Settings screen with flat form and Ctrl+S save → SIG
 - Create: `dictate/tui/history.py`
 - Test: `tests/tui/test_history_screen.py`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```python
 # tests/tui/test_history_screen.py
@@ -2984,13 +2984,13 @@ async def test_history_screen_lists_entries(tmp_path: Path, monkeypatch):
         assert "second" in body
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/tui/test_history_screen.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/tui/history.py`**
+- [x] **Step 3: Implement `dictate/tui/history.py`**
 
 ```python
 # dictate/tui/history.py
@@ -3069,13 +3069,13 @@ def _short_ts(iso_ts: str) -> str:
         return iso_ts[:19]
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/tui/test_history_screen.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/tui/history.py tests/tui/test_history_screen.py
