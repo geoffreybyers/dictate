@@ -1526,7 +1526,7 @@ git commit -m "feat(recorder): sounddevice mono 16 kHz capture"
 - Create: `dictate/transcriber.py`
 - Test: `tests/unit/test_transcriber.py`
 
-- [ ] **Step 1: Write failing tests (mocked model)**
+- [x] **Step 1: Write failing tests (mocked model)**
 
 ```python
 # tests/unit/test_transcriber.py
@@ -1558,13 +1558,15 @@ def test_empty_audio_returns_empty_text():
     assert result.text == ""
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_transcriber.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/transcriber.py`**
+- [x] **Step 3: Implement `dictate/transcriber.py`**
+
+**Deviation from initial draft:** `from faster_whisper import WhisperModel` moved to module top level so `mock.patch("dictate.transcriber.WhisperModel")` in tests resolves correctly. The lazy-import comment is removed.
 
 ```python
 """faster-whisper wrapper. Loads the model once at startup."""
@@ -1578,6 +1580,7 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
+from faster_whisper import WhisperModel
 
 log = logging.getLogger(__name__)
 
@@ -1604,7 +1607,6 @@ class Transcriber:
         compute_type: str = "auto",
         cache_dir: Optional[Path] = None,
     ):
-        from faster_whisper import WhisperModel  # lazy import (heavy)
         if device == "auto":
             try:
                 import ctranslate2
@@ -1647,16 +1649,16 @@ class Transcriber:
         )
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_transcriber.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
-git add dictate/transcriber.py tests/unit/test_transcriber.py
+git add dictate/transcriber.py tests/unit/test_transcriber.py docs/superpowers/plans/2026-04-18-cli-replaces-gui.md
 git commit -m "feat(transcriber): faster-whisper wrapper with auto device/compute"
 ```
 
