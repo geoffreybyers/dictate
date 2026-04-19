@@ -95,7 +95,7 @@ git commit -m "chore: delete Tauri/React/sidecar scaffolding; seed Python packag
 **Files:**
 - Create: `pyproject.toml`, `requirements-dev.txt`
 
-- [ ] **Step 1: Write pyproject.toml**
+- [x] **Step 1: Write pyproject.toml**
 
 ```toml
 [build-system]
@@ -139,13 +139,13 @@ timeout = 30
 filterwarnings = ["error"]
 ```
 
-- [ ] **Step 2: Write requirements-dev.txt (for convenience)**
+- [x] **Step 2: Write requirements-dev.txt (for convenience)**
 
 ```
 -e .[dev]
 ```
 
-- [ ] **Step 3: Create virtualenv and install**
+- [x] **Step 3: Create virtualenv and install**
 
 ```bash
 python3 -m venv .venv
@@ -155,7 +155,7 @@ python3 -m venv .venv
 
 Expected: all dependencies install. If `faster-whisper` wheels fail on your platform, consult its README before proceeding.
 
-- [ ] **Step 4: Verify `pytest` runs (no tests yet, should exit 5 "no tests collected")**
+- [x] **Step 4: Verify `pytest` runs (no tests yet, should exit 5 "no tests collected")**
 
 ```bash
 .venv/bin/pytest -q
@@ -163,7 +163,7 @@ Expected: all dependencies install. If `faster-whisper` wheels fail on your plat
 
 Expected: `no tests ran in X.XX s` (exit code 5). Not an error for our purposes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add pyproject.toml requirements-dev.txt
