@@ -3264,7 +3264,7 @@ git commit -m "test(integration): subprocess tests for PID, SIGHUP, SIGTERM, SIG
 **Files:**
 - Create: `.github/workflows/ci.yml`
 
-- [ ] **Step 1: Write `.github/workflows/ci.yml`**
+- [x] **Step 1: Write `.github/workflows/ci.yml`**
 
 ```yaml
 name: CI
@@ -3310,7 +3310,7 @@ jobs:
       - run: python -m pytest tests/integration -v
 ```
 
-- [ ] **Step 2: Verify YAML parses**
+- [x] **Step 2: Verify YAML parses**
 
 ```bash
 python -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"
@@ -3318,7 +3318,7 @@ python -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"
 
 Expected: no output (success).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .github/workflows/ci.yml
