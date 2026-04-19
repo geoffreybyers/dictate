@@ -1215,7 +1215,7 @@ git commit -m "feat(jobs): single-worker transcription queue with overflow"
 - Create: `dictate/paste.py`
 - Test: `tests/unit/test_paste.py`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/unit/test_paste.py
@@ -1270,13 +1270,13 @@ def test_paste_wayland_missing_ydotool_raises_unavailable():
             be.paste("ctrl+v")
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_paste.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/paste.py`**
+- [x] **Step 3: Implement `dictate/paste.py`**
 
 ```python
 """Auto-paste: pynput on X11/mac/Win, ydotool shell-out on Wayland."""
@@ -1365,13 +1365,13 @@ def paste(shortcut: str) -> None:
         log.warning("autopaste unavailable: %s — clipboard-only", e)
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_paste.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/paste.py tests/unit/test_paste.py
