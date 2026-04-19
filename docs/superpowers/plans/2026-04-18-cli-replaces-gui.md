@@ -263,7 +263,7 @@ git commit -m "feat(errors): typed exceptions shared across modules"
 - Create: `dictate/config.py`
 - Test: `tests/unit/test_config.py`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 # tests/unit/test_config.py
@@ -322,7 +322,7 @@ def test_invalid_toml_falls_back_and_logs(tmp_path: Path, caplog):
     assert any("parse" in rec.message.lower() or "toml" in rec.message.lower() for rec in caplog.records)
 ```
 
-- [ ] **Step 2: Run tests — expect failure**
+- [x] **Step 2: Run tests — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_config.py -v
@@ -330,7 +330,7 @@ def test_invalid_toml_falls_back_and_logs(tmp_path: Path, caplog):
 
 Expected: import error (module doesn't exist).
 
-- [ ] **Step 3: Implement `dictate/config.py`**
+- [x] **Step 3: Implement `dictate/config.py`**
 
 ```python
 """Config schema, defaults, TOML load/save. Atomic writes; bad fields fall back with logs."""
@@ -535,16 +535,16 @@ def _fmt(v) -> str:
     raise TypeError(f"unsupported TOML value type: {type(v).__name__}")
 ```
 
-- [ ] **Step 4: Run tests — expect PASS**
+- [x] **Step 4: Run tests — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_config.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
-git add dictate/config.py tests/unit/test_config.py
+git add dictate/config.py tests/unit/test_config.py docs/superpowers/plans/2026-04-18-cli-replaces-gui.md
 git commit -m "feat(config): TOML load/save with defaults, validation, atomic writes"
 ```
 
