@@ -3091,7 +3091,7 @@ git commit -m "feat(tui): History screen grouped by day"
 **Files:**
 - Create: `tests/integration/test_daemon_subprocess.py`, `tests/integration/conftest.py`
 
-- [ ] **Step 1: Write `tests/integration/conftest.py`**
+- [x] **Step 1: Write `tests/integration/conftest.py`**
 
 ```python
 # tests/integration/conftest.py
@@ -3147,7 +3147,7 @@ def spawn_daemon(dictate_env, monkeypatch):
             proc.kill()
 ```
 
-- [ ] **Step 2: Write stub daemon `tests/integration/_stub_daemon.py`**
+- [x] **Step 2: Write stub daemon `tests/integration/_stub_daemon.py`**
 
 ```python
 # tests/integration/_stub_daemon.py
@@ -3181,7 +3181,7 @@ D.HotkeyListener = FakeHL
 sys.exit(D.main())
 ```
 
-- [ ] **Step 3: Write failing integration tests**
+- [x] **Step 3: Write failing integration tests**
 
 ```python
 # tests/integration/test_daemon_subprocess.py
@@ -3244,13 +3244,13 @@ def test_sigusr1_flips_recording_state(spawn_daemon, dictate_env):
     _wait_status(dictate_env["XDG_CACHE_HOME"], lambda d: d["recording"] is False, timeout=2)
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/integration -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tests/integration
