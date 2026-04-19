@@ -745,7 +745,7 @@ git commit -m "feat(state): PID, status.json, history.jsonl with atomic writes +
 - Create: `dictate/log.py`
 - Test: `tests/unit/test_log.py`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 # tests/unit/test_log.py
@@ -778,13 +778,13 @@ def test_configure_respects_level(tmp_path: Path):
     assert "info message" not in body
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_log.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/log.py`**
+- [x] **Step 3: Implement `dictate/log.py`**
 
 ```python
 """Rotating file logger — configured once at daemon startup."""
@@ -811,6 +811,7 @@ def configure(path: Path, level: str = "info", max_size_mb: int = 10) -> None:
     # Remove previous handlers (tests call this repeatedly)
     for h in list(root.handlers):
         root.removeHandler(h)
+        h.close()
     handler = RotatingFileHandler(
         str(path),
         maxBytes=max_size_mb * 1024 * 1024,
@@ -824,13 +825,13 @@ def configure(path: Path, level: str = "info", max_size_mb: int = 10) -> None:
     root.setLevel(_LEVELS.get(level.lower(), logging.INFO))
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_log.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/log.py tests/unit/test_log.py
