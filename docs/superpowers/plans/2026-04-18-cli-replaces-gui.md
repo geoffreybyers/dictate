@@ -2394,7 +2394,7 @@ git commit -m "feat(cli): subcommand dispatch (daemon default, tui, toggle/start
 - Create: `dictate/tui/footer.py`
 - Test: `tests/tui/test_app.py`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```python
 # tests/tui/test_app.py
@@ -2434,13 +2434,13 @@ async def test_sidebar_navigation(tmp_path: Path, monkeypatch):
         assert app.current_screen_name == "history"
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/tui/test_app.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/tui/footer.py`**
+- [x] **Step 3: Implement `dictate/tui/footer.py`**
 
 ```python
 # dictate/tui/footer.py
@@ -2480,7 +2480,7 @@ class StatusFooter(Static):
         self.update(f"{state}{suffix}")
 ```
 
-- [ ] **Step 4: Implement `dictate/tui/app.py`**
+- [x] **Step 4: Implement `dictate/tui/app.py`**
 
 ```python
 """Textual app root. Three screens: Status, Settings, History."""
@@ -2539,13 +2539,13 @@ def run_tui() -> int:
     return 0
 ```
 
-- [ ] **Step 5: Run — expect PASS**
+- [x] **Step 5: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/tui/test_app.py -v
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add dictate/tui/app.py dictate/tui/footer.py tests/tui/test_app.py
