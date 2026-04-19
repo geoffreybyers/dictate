@@ -1388,7 +1388,7 @@ git commit -m "feat(paste): platform dispatch — pynput on X11/mac/Win, ydotool
 - Create: `dictate/recorder.py`
 - Test: `tests/unit/test_recorder.py`
 
-- [ ] **Step 1: Write failing tests (mocked sounddevice)**
+- [x] **Step 1: Write failing tests (mocked sounddevice)**
 
 ```python
 # tests/unit/test_recorder.py
@@ -1431,13 +1431,13 @@ def test_start_failure_raises_audio_error():
             rec.start()
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_recorder.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/recorder.py`**
+- [x] **Step 3: Implement `dictate/recorder.py`**
 
 ```python
 """Microphone capture via sounddevice. Mono float32 @ 16 kHz."""
@@ -1505,13 +1505,13 @@ class Recorder:
             return out
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_recorder.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/recorder.py tests/unit/test_recorder.py
