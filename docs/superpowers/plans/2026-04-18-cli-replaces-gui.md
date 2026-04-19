@@ -1030,7 +1030,7 @@ git commit -m "feat(hotkey): binding parser + HOLD/TOGGLE state machine"
 - Create: `dictate/jobs.py`
 - Test: `tests/unit/test_jobs.py`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 # tests/unit/test_jobs.py
@@ -1118,13 +1118,13 @@ def test_stop_drains_with_deadline():
     assert processed == [0, 1, 2]
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_jobs.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/jobs.py`**
+- [x] **Step 3: Implement `dictate/jobs.py`**
 
 ```python
 """Single-worker transcription queue with overflow-drops-oldest semantics."""
@@ -1194,13 +1194,13 @@ class TranscriptionQueue:
                 log.exception("queue worker raised on item=%r", item)
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_jobs.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/jobs.py tests/unit/test_jobs.py
