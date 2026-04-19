@@ -556,7 +556,7 @@ git commit -m "feat(config): TOML load/save with defaults, validation, atomic wr
 - Create: `dictate/state.py`
 - Test: `tests/unit/test_state.py`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 # tests/unit/test_state.py
@@ -616,13 +616,13 @@ def test_history_rotation_at_limit(tmp_path: Path):
     assert texts == ["entry-2", "entry-3", "entry-4"]
 ```
 
-- [ ] **Step 2: Run tests — expect import failure**
+- [x] **Step 2: Run tests — expect import failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_state.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/state.py`**
+- [x] **Step 3: Implement `dictate/state.py`**
 
 ```python
 """PID file, status.json, history.jsonl — all writes are atomic."""
@@ -724,13 +724,13 @@ def _atomic_write_text(path: Path, text: str) -> None:
     os.replace(tmp, path)
 ```
 
-- [ ] **Step 4: Run tests — expect PASS**
+- [x] **Step 4: Run tests — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_state.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/state.py tests/unit/test_state.py
