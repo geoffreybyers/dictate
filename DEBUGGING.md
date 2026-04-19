@@ -1,74 +1,65 @@
-# Debugging the dictate app
+# Debugging dictate
 
-## Viewing logs and inspecting the UI
+## Logs
 
-### 1. Run in development mode
-
-From the project root:
+Daemon logs to `~/.local/share/dictate/dictate.log` (rotating, 10 MB × 3 by default; tune in `[logs]`).
 
 ```bash
-npm run tauri dev
+tail -f ~/.local/share/dictate/dictate.log
 ```
 
-- **Rust (Tauri) logs** go to the **terminal** where you ran the command (stdout/stderr).
-- **Frontend (React) logs** appear in the **webview DevTools console** (see below).
+Set `logs.level = "debug"` for verbose output.
 
-### 2. Open WebView DevTools (frontend / React)
+## Runtime state
 
-With the app running (dev or built), open the developer tools on the app window:
-
-- **Windows / Linux:** `Ctrl + Shift + I`
-- **macOS:** `Cmd + Option + I`
-
-Or **right‑click** inside the app window → **Inspect** / **Inspect Element**.
-
-Use the **Console** tab to see:
-
-- `console.log` / `console.warn` / `console.error` from the frontend
-- JavaScript errors (e.g. if the UI freezes due to an uncaught exception or infinite loop)
-
-Use the **Performance** or **Profiler** tab to see if the main thread is busy (e.g. long tasks or many re-renders).
-
-### 3. Optional: verbose logging on the Developer screen
-
-If the app “freezes” when you open the **Developer** settings tab, you can enable extra console logs for that screen:
-
-1. Open DevTools (e.g. `Ctrl + Shift + I`) **before** opening the Developer tab.
-2. In the Console, run:
-
-   ```js
-   localStorage.setItem('dictate:debugDeveloper', '1')
-   ```
-
-3. Reload the app (or navigate away and back to Developer).
-4. Go to the **Developer** tab and watch the Console for messages like `[DeveloperScreen] …`.
-5. When done, turn it off:
-
-   ```js
-   localStorage.removeItem('dictate:debugDeveloper')
-   ```
-
-Interpretation:
-
-- **Many `[DeveloperScreen] render`** → likely a render loop.
-- **One `render`, then e.g. `useEffect: …` and nothing after** → that effect or an invoke may be hanging or very slow.
-
-### 4. Log files
-
-- **Developer → Open Logs** opens the sidecar log (e.g. `…/app.log` next to the config).
-- **General → Open app logs** opens the Tauri app log (e.g. `dictate.log` in the app log directory).
-
-Use these for backend/sidecar issues; for frontend freezes, DevTools Console and optional `dictate:debugDeveloper` logs are more useful.
-
-### 5. Auto-open DevTools in dev (optional)
-
-To have DevTools open automatically when running `npm run tauri dev`, you can open them from Rust in debug builds. In `src-tauri/src/lib.rs`, inside the `.setup()` closure, add:
-
-```rust
-#[cfg(debug_assertions)]
-if let Some(win) = app.get_webview_window("main") {
-    let _ = win.open_devtools();
-}
+```bash
+cat ~/.cache/dictate/status.json | jq
 ```
 
-Remove or disable this when you are done debugging.
+## Verbose daemon (foreground)
+
+Run the daemon from a terminal to see stderr too:
+
+```bash
+dictate 2>&1 | tee /tmp/dictate.log
+```
+
+## Wayland auto-paste (ydotool)
+
+If auto-paste silently falls back to clipboard-only:
+
+```bash
+# Check ydotoold
+systemctl --user status ydotoold.service
+
+# Test ydotool by hand
+echo "ctrl+v" | ydotool key ctrl+v
+```
+
+Reference systemd unit for `ydotoold`:
+
+```ini
+[Unit]
+Description=ydotool user daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ydotoold --socket-path=%t/.ydotool_socket --socket-own=%U:%G
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target
+```
+
+## No microphone / no device
+
+`~/.cache/dictate/status.json.last_error` will contain the detail. Fix the device in `[audio].microphone` or leave it blank for the system default. Run `python -c "import sounddevice; print(sounddevice.query_devices())"` to list devices.
+
+## Tests
+
+```bash
+pytest tests/unit -v
+pytest tests/tui -v
+pytest tests/integration -v
+```
