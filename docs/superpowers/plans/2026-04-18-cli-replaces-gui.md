@@ -1670,7 +1670,7 @@ git commit -m "feat(transcriber): faster-whisper wrapper with auto device/comput
 - Create: `dictate/clipboard.py`
 - Test: `tests/unit/test_clipboard.py`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```python
 # tests/unit/test_clipboard.py
@@ -1692,13 +1692,13 @@ def test_copy_swallows_pyperclip_exception(caplog):
     assert any("clipboard" in rec.message.lower() for rec in caplog.records)
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/unit/test_clipboard.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/clipboard.py`**
+- [x] **Step 3: Implement `dictate/clipboard.py`**
 
 ```python
 """Clipboard writes via pyperclip. Failures log and return."""
@@ -1714,20 +1714,20 @@ log = logging.getLogger(__name__)
 def copy(text: str) -> None:
     try:
         pyperclip.copy(text)
-    except pyperclip.PyperclipException as e:
+    except Exception as e:
         log.warning("clipboard write failed: %s", e)
 ```
 
-- [ ] **Step 4: Run — expect PASS**
+- [x] **Step 4: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_clipboard.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
-git add dictate/clipboard.py tests/unit/test_clipboard.py
+git add dictate/clipboard.py tests/unit/test_clipboard.py docs/superpowers/plans/2026-04-18-cli-replaces-gui.md
 git commit -m "feat(clipboard): pyperclip wrapper with graceful failure"
 ```
 
