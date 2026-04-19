@@ -180,7 +180,7 @@ git commit -m "chore: add pyproject.toml with runtime + dev deps"
 - Create: `dictate/errors.py`
 - Test: `tests/unit/test_errors.py`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 # tests/unit/test_errors.py
@@ -204,7 +204,7 @@ def test_errors_carry_messages():
     assert "bad value for hotkey.binding" in str(err)
 ```
 
-- [ ] **Step 2: Run the test (fails with ImportError)**
+- [x] **Step 2: Run the test (fails with ImportError)**
 
 ```bash
 .venv/bin/pytest tests/unit/test_errors.py -v
@@ -212,7 +212,7 @@ def test_errors_carry_messages():
 
 Expected: FAIL — `ModuleNotFoundError: No module named 'dictate.errors'`.
 
-- [ ] **Step 3: Implement `dictate/errors.py`**
+- [x] **Step 3: Implement `dictate/errors.py`**
 
 ```python
 """Typed exceptions used across dictate."""
@@ -242,13 +242,13 @@ class PasteUnavailableError(DictateError):
     """Auto-paste backend unavailable on this platform."""
 ```
 
-- [ ] **Step 4: Run test; expect PASS**
+- [x] **Step 4: Run test; expect PASS**
 
 ```bash
 .venv/bin/pytest tests/unit/test_errors.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add dictate/errors.py tests/unit/test_errors.py
