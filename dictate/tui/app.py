@@ -6,6 +6,7 @@ from textual.containers import Horizontal, Vertical
 from textual.widgets import Header, Static, ListView, ListItem, Label
 
 from dictate.tui.footer import StatusFooter
+from dictate.tui.status import StatusScreen
 
 
 class Sidebar(ListView):
@@ -38,15 +39,27 @@ class DictateTUI(App):
                 ListItem(Label("Settings"), id="nav-settings"),
                 ListItem(Label("History"), id="nav-history"),
             )
-            yield Vertical(Static("Welcome — press s for Settings, h for History.",
-                                  id="content-static"), id="content")
+            yield Vertical(StatusScreen(id="screen-body"), id="content")
         yield StatusFooter(id="status-footer")
 
-    def action_jump(self, name: str) -> None:
+    async def action_jump(self, name: str) -> None:
         self.current_screen_name = name
-        content = self.query_one("#content-static", Static)
-        content.update(f"(screen: {name})")
-        # Real screen implementations in Task 17-19 replace this
+        content = self.query_one("#content")
+        # Remove all existing children
+        for child in list(content.children):
+            await child.remove()
+        try:
+            if name == "status":
+                content.mount(StatusScreen(id="screen-body"))
+            elif name == "settings":
+                from dictate.tui.settings import SettingsScreen
+                content.mount(SettingsScreen(id="screen-body"))
+            elif name == "history":
+                from dictate.tui.history import HistoryScreen
+                content.mount(HistoryScreen(id="screen-body"))
+        except ImportError:
+            # Screen not yet implemented (tasks 18-19 pending).
+            content.mount(Static(f"(screen: {name} — not yet implemented)", id="screen-body"))
 
 
 def run_tui() -> int:

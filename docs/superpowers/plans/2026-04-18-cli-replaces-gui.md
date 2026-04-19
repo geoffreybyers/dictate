@@ -2561,7 +2561,7 @@ git commit -m "feat(tui): app skeleton with sidebar navigation and live footer"
 - Modify: `dictate/tui/app.py`
 - Test: `tests/tui/test_status_screen.py`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```python
 # tests/tui/test_status_screen.py
@@ -2591,13 +2591,13 @@ async def test_status_screen_renders_state_fields(tmp_path: Path, monkeypatch):
         assert "recording" in state_widget.render().plain.lower()
 ```
 
-- [ ] **Step 2: Run — expect failure**
+- [x] **Step 2: Run — expect failure**
 
 ```bash
 .venv/bin/pytest tests/tui/test_status_screen.py -v
 ```
 
-- [ ] **Step 3: Implement `dictate/tui/status.py`**
+- [x] **Step 3: Implement `dictate/tui/status.py`**
 
 ```python
 # dictate/tui/status.py
@@ -2651,7 +2651,7 @@ class StatusScreen(Widget):
         self.query_one("#status-info", Static).update(" · ".join(info))
 ```
 
-- [ ] **Step 4: Wire `StatusScreen` into `DictateTUI`**
+- [x] **Step 4: Wire `StatusScreen` into `DictateTUI`**
 
 Replace the `action_jump` method in `dictate/tui/app.py` with screen mounting, and change `compose` to mount the status screen by default:
 
@@ -2686,13 +2686,13 @@ Add the import at the top of `dictate/tui/app.py`:
 from dictate.tui.status import StatusScreen
 ```
 
-- [ ] **Step 5: Run — expect PASS**
+- [x] **Step 5: Run — expect PASS**
 
 ```bash
 .venv/bin/pytest tests/tui/test_status_screen.py tests/tui/test_app.py -v
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add dictate/tui/status.py dictate/tui/app.py tests/tui/test_status_screen.py
