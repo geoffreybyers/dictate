@@ -3758,15 +3758,15 @@ git commit -m "chore: PyPI metadata + classifiers"
 
 **Files:** none — verification only.
 
-- [ ] **Step 1: Full test suite**
+- [x] **Step 1: Full test suite**
 
 ```bash
 .venv/bin/pytest -v
 ```
 
-Expected: all green.
+Expected: all green. Result: 57 passed (unit + TUI + integration).
 
-- [ ] **Step 2: Real end-to-end smoke (local, manual)**
+- [ ] **Step 2: Real end-to-end smoke (local, manual)** — pending user execution
 
 On the dev machine:
 
