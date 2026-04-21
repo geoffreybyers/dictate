@@ -6,7 +6,7 @@ import threading
 from collections import deque
 from typing import Any, Callable
 
-from dictate.errors import QueueOverflowError
+from private_dictate.errors import QueueOverflowError
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class TranscriptionQueue:
     def start(self) -> None:
         if self._thread is not None:
             return
-        self._thread = threading.Thread(target=self._run, daemon=True, name="dictate-queue")
+        self._thread = threading.Thread(target=self._run, daemon=True, name="private-dictate-queue")
         self._thread.start()
 
     def enqueue(self, item: Any) -> None:

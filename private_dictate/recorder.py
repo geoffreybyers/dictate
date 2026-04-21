@@ -8,7 +8,7 @@ from typing import Optional
 import numpy as np
 import sounddevice as sd
 
-from dictate.errors import AudioError
+from private_dictate.errors import AudioError
 
 log = logging.getLogger(__name__)
 

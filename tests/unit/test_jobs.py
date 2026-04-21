@@ -1,8 +1,8 @@
 import threading
 import time
 import pytest
-from dictate.jobs import TranscriptionQueue
-from dictate.errors import QueueOverflowError
+from private_dictate.jobs import TranscriptionQueue
+from private_dictate.errors import QueueOverflowError
 
 
 def test_enqueue_processes_in_order():

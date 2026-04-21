@@ -1,9 +1,9 @@
 from unittest.mock import MagicMock, patch
-from dictate.hotkey import HotkeyListener, Mode
+from private_dictate.hotkey import HotkeyListener, Mode
 
 
 def test_listener_starts_and_stops():
-    with patch("dictate.hotkey.keyboard") as kb:
+    with patch("private_dictate.hotkey.keyboard") as kb:
         listener_instance = MagicMock()
         kb.Listener.return_value = listener_instance
         hl = HotkeyListener("ctrl+shift+d", Mode.HOLD,
@@ -15,7 +15,7 @@ def test_listener_starts_and_stops():
 
 
 def test_listener_press_release_drives_state_machine():
-    with patch("dictate.hotkey.keyboard") as kb:
+    with patch("private_dictate.hotkey.keyboard") as kb:
         events = []
         kb.Listener.return_value = MagicMock()
         hl = HotkeyListener("ctrl+shift+d", Mode.HOLD,

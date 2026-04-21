@@ -6,7 +6,7 @@ from pathlib import Path
 
 from textual.widgets import Static
 
-from dictate import paths
+from private_dictate import paths
 
 
 class StatusFooter(Static):

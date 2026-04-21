@@ -18,7 +18,7 @@ assignees: ''
 
 ## Environment
 
-- **dictate version:** <!-- from Advanced → Session Info, or the git commit if built from source -->
+- **private-dictate version:** <!-- from Advanced → Session Info, or the git commit if built from source -->
 - **OS / distro:** <!-- e.g. Ubuntu 24.04 -->
 - **Session type:** <!-- X11 / Wayland — shown in Advanced → Session Info -->
 - **Desktop environment:** <!-- GNOME 46 / KDE Plasma 6.1 / Sway / etc. -->

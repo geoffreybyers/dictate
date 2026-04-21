@@ -45,7 +45,7 @@ class StateWriter:
 
     @property
     def pid_path(self) -> Path:
-        return self.cache_dir / "dictate.pid"
+        return self.cache_dir / "private-dictate.pid"
 
     @property
     def status_path(self) -> Path:

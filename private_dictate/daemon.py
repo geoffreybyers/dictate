@@ -10,14 +10,14 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from dictate import clipboard, log, paste, paths
-from dictate.config import Config, load as load_config
-from dictate.errors import DictateError
-from dictate.hotkey import HotkeyListener, Mode
-from dictate.jobs import TranscriptionQueue
-from dictate.recorder import Recorder
-from dictate.state import HistoryEntry, StateWriter, StatusSnapshot
-from dictate.transcriber import Transcriber, TranscriptionResult
+from private_dictate import clipboard, log, paste, paths
+from private_dictate.config import Config, load as load_config
+from private_dictate.errors import PrivateDictateError
+from private_dictate.hotkey import HotkeyListener, Mode
+from private_dictate.jobs import TranscriptionQueue
+from private_dictate.recorder import Recorder
+from private_dictate.state import HistoryEntry, StateWriter, StatusSnapshot
+from private_dictate.transcriber import Transcriber, TranscriptionResult
 
 
 class Daemon:
@@ -42,7 +42,7 @@ class Daemon:
         log.configure(paths.log_path(),
                       level=self._cfg.logs.level,
                       max_size_mb=self._cfg.logs.max_size_mb)
-        logging.getLogger("dictate").info("daemon starting")
+        logging.getLogger("private_dictate").info("daemon starting")
         self._state.write_pid()
         self._install_signal_handlers()
 
@@ -83,21 +83,21 @@ class Daemon:
         signal.signal(signal.SIGUSR1, self._handle_sigusr1)
 
     def _handle_sigterm(self, signum, frame) -> None:
-        logging.getLogger("dictate").info("SIGTERM/SIGINT received — shutting down")
+        logging.getLogger("private_dictate").info("SIGTERM/SIGINT received — shutting down")
         self._stop_event.set()
 
     def _handle_sighup(self, signum, frame) -> None:
-        logging.getLogger("dictate").info("SIGHUP — reloading config")
+        logging.getLogger("private_dictate").info("SIGHUP — reloading config")
         try:
             new_cfg = load_config(paths.config_path())
-        except DictateError as e:
+        except PrivateDictateError as e:
             self._last_error = f"config reload failed: {e}"
             return
         needs_restart = self._structural_change(self._cfg, new_cfg)
         self._cfg = new_cfg
         if needs_restart:
             self._needs_restart = True
-            logging.getLogger("dictate").warning(
+            logging.getLogger("private_dictate").warning(
                 "structural config change — restart required"
             )
 
@@ -120,7 +120,7 @@ class Daemon:
     def _start_recording(self) -> None:
         try:
             self._recorder.start()
-        except DictateError as e:
+        except PrivateDictateError as e:
             self._last_error = str(e)
 
     def _stop_recording(self) -> None:
@@ -129,7 +129,7 @@ class Daemon:
             return
         try:
             self._queue.enqueue(audio)
-        except DictateError as e:
+        except PrivateDictateError as e:
             self._last_error = str(e)
 
     def _process_audio(self, audio) -> None:
@@ -137,7 +137,7 @@ class Daemon:
             result: TranscriptionResult = self._transcriber.transcribe(audio)
         except Exception as e:
             self._last_error = f"transcription failed: {e}"
-            logging.getLogger("dictate").exception("transcription failed")
+            logging.getLogger("private_dictate").exception("transcription failed")
             return
         if not result.text:
             return
@@ -184,7 +184,7 @@ class Daemon:
     # --- shutdown -----------------------------------------------------------
 
     def _shutdown(self) -> None:
-        logging.getLogger("dictate").info("daemon shutting down")
+        logging.getLogger("private_dictate").info("daemon shutting down")
         if self._hotkey:
             self._hotkey.stop()
         if self._queue:

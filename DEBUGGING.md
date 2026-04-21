@@ -1,11 +1,11 @@
-# Debugging dictate
+# Debugging PrivateDictate
 
 ## Logs
 
-Daemon logs to `~/.local/share/dictate/dictate.log` (rotating, 10 MB × 3 by default; tune in `[logs]`).
+Daemon logs to `~/.local/share/private-dictate/private-dictate.log` (rotating, 10 MB × 3 by default; tune in `[logs]`).
 
 ```bash
-tail -f ~/.local/share/dictate/dictate.log
+tail -f ~/.local/share/private-dictate/private-dictate.log
 ```
 
 Set `logs.level = "debug"` for verbose output.
@@ -13,7 +13,7 @@ Set `logs.level = "debug"` for verbose output.
 ## Runtime state
 
 ```bash
-cat ~/.cache/dictate/status.json | jq
+cat ~/.cache/private-dictate/status.json | jq
 ```
 
 ## Verbose daemon (foreground)
@@ -21,7 +21,7 @@ cat ~/.cache/dictate/status.json | jq
 Run the daemon from a terminal to see stderr too:
 
 ```bash
-dictate 2>&1 | tee /tmp/dictate.log
+private-dictate 2>&1 | tee /tmp/private-dictate.log
 ```
 
 ## Wayland auto-paste (ydotool)
@@ -54,7 +54,7 @@ WantedBy=default.target
 
 ## No microphone / no device
 
-`~/.cache/dictate/status.json.last_error` will contain the detail. Fix the device in `[audio].microphone` or leave it blank for the system default. Run `python -c "import sounddevice; print(sounddevice.query_devices())"` to list devices.
+`~/.cache/private-dictate/status.json.last_error` will contain the detail. Fix the device in `[audio].microphone` or leave it blank for the system default. Run `python -c "import sounddevice; print(sounddevice.query_devices())"` to list devices.
 
 ## Tests
 

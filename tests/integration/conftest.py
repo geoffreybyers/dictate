@@ -32,7 +32,7 @@ def spawn_daemon(dictate_env, monkeypatch):
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
     )
     # wait for PID file to appear (up to 5s)
-    pid_file = Path(dictate_env["XDG_CACHE_HOME"]) / "dictate" / "dictate.pid"
+    pid_file = Path(dictate_env["XDG_CACHE_HOME"]) / "private-dictate" / "private-dictate.pid"
     for _ in range(50):
         if pid_file.exists():
             break

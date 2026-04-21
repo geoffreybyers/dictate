@@ -1,4 +1,4 @@
-"""CLI dispatch. `dictate` alone = daemon; subcommands for TUI, signals."""
+"""CLI dispatch. `private-dictate` alone = daemon; subcommands for TUI, signals."""
 from __future__ import annotations
 
 import argparse
@@ -8,12 +8,12 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from dictate import __version__, paths
-from dictate.daemon import Daemon
+from private_dictate import __version__, paths
+from private_dictate.daemon import Daemon
 
 
 def _read_pid() -> Optional[int]:
-    pid_path = paths.cache_dir() / "dictate.pid"
+    pid_path = paths.cache_dir() / "private-dictate.pid"
     if not pid_path.exists():
         return None
     try:
@@ -31,7 +31,7 @@ def _read_pid() -> Optional[int]:
 def _signal_daemon(sig: int) -> int:
     pid = _read_pid()
     if pid is None:
-        print("no dictate daemon running. start one with 'dictate' in another terminal.",
+        print("no private-dictate daemon running. start one with 'private-dictate' in another terminal.",
               file=sys.stderr)
         return 1
     try:
@@ -43,7 +43,7 @@ def _signal_daemon(sig: int) -> int:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
-    parser = argparse.ArgumentParser(prog="dictate", description="Offline speech-to-text.")
+    parser = argparse.ArgumentParser(prog="private-dictate", description="Offline speech-to-text.")
     parser.add_argument("--version", action="store_true")
     sub = parser.add_subparsers(dest="cmd")
     sub.add_parser("tui", help="Launch the Textual TUI (requires a running daemon).")
@@ -54,17 +54,17 @@ def main(argv: Optional[list[str]] = None) -> int:
     args = parser.parse_args(argv)
 
     if args.version:
-        print(f"dictate {__version__}")
+        print(f"private-dictate {__version__}")
         return 0
 
     if args.cmd is None:
         return Daemon().run()
     if args.cmd == "tui":
         if _read_pid() is None:
-            print("no dictate daemon running. start one with 'dictate' in another terminal, "
+            print("no private-dictate daemon running. start one with 'private-dictate' in another terminal, "
                   "or see README for systemd setup.", file=sys.stderr)
             return 1
-        from dictate.tui.app import run_tui
+        from private_dictate.tui.app import run_tui
         return run_tui()
     if args.cmd in {"toggle", "start", "stop"}:
         return _signal_daemon(signal.SIGUSR1)

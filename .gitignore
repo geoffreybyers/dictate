@@ -10,12 +10,12 @@ build/
 .coverage
 htmlcov/
 
-# dictate runtime files (when running from repo)
+# private-dictate runtime files (when running from repo)
 /config.toml
-/dictate.pid
+/private-dictate.pid
 /status.json
 /history.jsonl
-/dictate.log
+/private-dictate.log
 
 # Local environment
 .env

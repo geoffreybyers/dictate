@@ -5,15 +5,15 @@ from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Header, Static, ListView, ListItem, Label
 
-from dictate.tui.footer import StatusFooter
-from dictate.tui.status import StatusScreen
+from private_dictate.tui.footer import StatusFooter
+from private_dictate.tui.status import StatusScreen
 
 
 class Sidebar(ListView):
     DEFAULT_CSS = "Sidebar { width: 20; border-right: solid $accent; }"
 
 
-class DictateTUI(App):
+class PrivateDictateTUI(App):
     CSS = """
     Screen { layout: vertical; }
     #body { height: 1fr; }
@@ -51,13 +51,13 @@ class DictateTUI(App):
         if name == "status":
             content.mount(StatusScreen(id="screen-body"))
         elif name == "settings":
-            from dictate.tui.settings import SettingsScreen
+            from private_dictate.tui.settings import SettingsScreen
             content.mount(SettingsScreen(id="screen-body"))
         elif name == "history":
-            from dictate.tui.history import HistoryScreen
+            from private_dictate.tui.history import HistoryScreen
             content.mount(HistoryScreen(id="screen-body"))
 
 
 def run_tui() -> int:
-    DictateTUI().run()
+    PrivateDictateTUI().run()
     return 0

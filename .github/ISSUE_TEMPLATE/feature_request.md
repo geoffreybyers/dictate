@@ -8,11 +8,11 @@ assignees: ''
 
 ## Problem / motivation
 
-<!-- What are you trying to accomplish that dictate doesn't support today? -->
+<!-- What are you trying to accomplish that PrivateDictate doesn't support today? -->
 
 ## Proposed solution
 
-<!-- What would you like dictate to do? Be as specific as you can — UI, behavior, edge cases. -->
+<!-- What would you like PrivateDictate to do? Be as specific as you can — UI, behavior, edge cases. -->
 
 ## Alternatives considered
 

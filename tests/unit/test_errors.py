@@ -1,5 +1,5 @@
-from dictate.errors import (
-    DictateError,
+from private_dictate.errors import (
+    PrivateDictateError,
     ConfigError,
     AudioError,
     TranscriptionError,
@@ -10,7 +10,7 @@ from dictate.errors import (
 
 def test_all_errors_inherit_from_base():
     for cls in (ConfigError, AudioError, TranscriptionError, QueueOverflowError, PasteUnavailableError):
-        assert issubclass(cls, DictateError)
+        assert issubclass(cls, PrivateDictateError)
 
 
 def test_errors_carry_messages():

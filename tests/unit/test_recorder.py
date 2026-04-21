@@ -1,12 +1,12 @@
 from unittest.mock import patch, MagicMock
 import numpy as np
 import pytest
-from dictate.recorder import Recorder
-from dictate.errors import AudioError
+from private_dictate.recorder import Recorder
+from private_dictate.errors import AudioError
 
 
 def test_start_then_stop_returns_concatenated_buffer():
-    with patch("dictate.recorder.sd") as sd:
+    with patch("private_dictate.recorder.sd") as sd:
         stream = MagicMock()
         sd.InputStream.return_value = stream
         rec = Recorder()
@@ -23,14 +23,14 @@ def test_start_then_stop_returns_concatenated_buffer():
 
 
 def test_stop_without_start_returns_empty():
-    with patch("dictate.recorder.sd"):
+    with patch("private_dictate.recorder.sd"):
         rec = Recorder()
         audio = rec.stop()
         assert audio.size == 0
 
 
 def test_start_failure_raises_audio_error():
-    with patch("dictate.recorder.sd") as sd:
+    with patch("private_dictate.recorder.sd") as sd:
         sd.InputStream.side_effect = Exception("no device")
         rec = Recorder()
         with pytest.raises(AudioError):

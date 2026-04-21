@@ -2,7 +2,7 @@
 import sys
 from unittest.mock import MagicMock
 
-from dictate import daemon as D
+from private_dictate import daemon as D
 
 # Replace hardware components with MagicMocks
 D.Transcriber = lambda *a, **kw: MagicMock(device="cpu", compute_type="int8", last_error=None)

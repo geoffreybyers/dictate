@@ -11,9 +11,9 @@ log = logging.getLogger(__name__)
 
 
 DEFAULT_CONFIG_TOML = """\
-# dictate config — see `dictate tui` for an interactive editor.
+# private-dictate config — see `private-dictate tui` for an interactive editor.
 # Daemon reloads this file on SIGHUP. Fields marked [restart] require
-# `dictate` to be restarted.
+# `private-dictate` to be restarted.
 
 [hotkey]
 binding = "ctrl+shift+d"
