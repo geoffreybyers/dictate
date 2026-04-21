@@ -48,7 +48,7 @@ Hold `ctrl+shift+d` to record, release to transcribe. The transcription lands in
 
 The daemon reads `~/.config/private-dictate/config.toml`. On first run it writes a fully-commented default. Edit by hand or use `private-dictate tui`. Changes take effect on `SIGHUP` (the TUI sends this automatically on save).
 
-Structural changes (model size, device, compute type, mic) require a daemon restart — the TUI prompts you.
+Structural changes — `model.size`, `model.device`, `model.compute_type`, `model.cache_dir`, and `audio.microphone` — require a daemon restart. The Status screen shows `⟳ config changed — restart daemon to apply` when one is pending. Stop the daemon (Ctrl+C or `systemctl --user restart private-dictate`) and start it again to pick up the change.
 
 ## Wayland setup
 
