@@ -7,17 +7,17 @@ from pathlib import Path
 
 def config_dir() -> Path:
     base = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
-    return Path(base) / "dictate"
+    return Path(base) / "private-dictate"
 
 
 def cache_dir() -> Path:
     base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
-    return Path(base) / "dictate"
+    return Path(base) / "private-dictate"
 
 
 def data_dir() -> Path:
     base = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
-    return Path(base) / "dictate"
+    return Path(base) / "private-dictate"
 
 
 def config_path() -> Path:
@@ -25,4 +25,4 @@ def config_path() -> Path:
 
 
 def log_path() -> Path:
-    return data_dir() / "dictate.log"
+    return data_dir() / "private-dictate.log"

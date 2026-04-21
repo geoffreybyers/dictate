@@ -1,12 +1,12 @@
 import logging
 from pathlib import Path
-from dictate.log import configure
+from private_dictate.log import configure
 
 
 def test_configure_writes_to_file(tmp_path: Path):
-    log_path = tmp_path / "dictate.log"
+    log_path = tmp_path / "private-dictate.log"
     configure(log_path, level="info", max_size_mb=1)
-    logger = logging.getLogger("dictate.test")
+    logger = logging.getLogger("private_dictate.test")
     logger.info("hello world")
     for handler in logging.getLogger().handlers:
         handler.flush()
@@ -15,9 +15,9 @@ def test_configure_writes_to_file(tmp_path: Path):
 
 
 def test_configure_respects_level(tmp_path: Path):
-    log_path = tmp_path / "dictate.log"
+    log_path = tmp_path / "private-dictate.log"
     configure(log_path, level="warn", max_size_mb=1)
-    logger = logging.getLogger("dictate.test")
+    logger = logging.getLogger("private_dictate.test")
     logger.info("info message")
     logger.warning("warning message")
     for handler in logging.getLogger().handlers:

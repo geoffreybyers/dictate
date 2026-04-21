@@ -1,6 +1,6 @@
 from pathlib import Path
 import pytest
-from dictate.config import Config, load, save, DEFAULT_CONFIG_TOML
+from private_dictate.config import Config, load, save, DEFAULT_CONFIG_TOML
 
 
 def test_defaults_roundtrip(tmp_path: Path):

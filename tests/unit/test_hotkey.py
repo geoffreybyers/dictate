@@ -1,5 +1,5 @@
 import pytest
-from dictate.hotkey import parse_binding, HotkeyState, Mode
+from private_dictate.hotkey import parse_binding, HotkeyState, Mode
 
 
 def test_parse_binding_simple_key():

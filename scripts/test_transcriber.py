@@ -10,10 +10,10 @@ import wave
 
 import numpy as np
 
-# Allow importing from dictate/ when run from project root
+# Allow importing from private_dictate/ when run from project root
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _project_root = os.path.dirname(_script_dir)
-sys.path.insert(0, os.path.join(_project_root, "dictate"))
+sys.path.insert(0, os.path.join(_project_root, "private_dictate"))
 
 import config
 from transcriber import Transcriber

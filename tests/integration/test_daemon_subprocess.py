@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def _wait_status(cache_home: Path, predicate, timeout=5.0):
-    path = Path(cache_home) / "dictate" / "status.json"
+    path = Path(cache_home) / "private-dictate" / "status.json"
     start = time.time()
     while time.time() - start < timeout:
         if path.exists():
@@ -31,7 +31,7 @@ def test_daemon_writes_pid_and_status(spawn_daemon, dictate_env):
 
 def test_sighup_reloads_config(spawn_daemon, dictate_env):
     proc, _ = spawn_daemon
-    cfg_path = Path(dictate_env["XDG_CONFIG_HOME"]) / "dictate" / "config.toml"
+    cfg_path = Path(dictate_env["XDG_CONFIG_HOME"]) / "private-dictate" / "config.toml"
     body = cfg_path.read_text()
     cfg_path.write_text(body.replace('verbose_metadata = false', 'verbose_metadata = true'))
     os.kill(proc.pid, signal.SIGHUP)

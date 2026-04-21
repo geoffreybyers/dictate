@@ -3,17 +3,17 @@ import os
 from pathlib import Path
 
 import pytest
-from dictate.state import StateWriter, StatusSnapshot, HistoryEntry
+from private_dictate.state import StateWriter, StatusSnapshot, HistoryEntry
 
 
 def test_write_pid_then_clear(tmp_path: Path):
     sw = StateWriter(cache_dir=tmp_path, data_dir=tmp_path)
     sw.write_pid()
-    assert (tmp_path / "dictate.pid").exists()
-    body = (tmp_path / "dictate.pid").read_text().splitlines()
+    assert (tmp_path / "private-dictate.pid").exists()
+    body = (tmp_path / "private-dictate.pid").read_text().splitlines()
     assert int(body[0]) == os.getpid()
     sw.clear_pid()
-    assert not (tmp_path / "dictate.pid").exists()
+    assert not (tmp_path / "private-dictate.pid").exists()
 
 
 def test_write_status_atomic(tmp_path: Path):

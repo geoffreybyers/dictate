@@ -2,15 +2,15 @@ import sys
 import types
 from unittest.mock import patch, MagicMock
 import pytest
-from dictate.paste import paste, select_backend, WaylandYdotoolBackend, PynputBackend
-from dictate.errors import PasteUnavailableError
+from private_dictate.paste import paste, select_backend, WaylandYdotoolBackend, PynputBackend
+from private_dictate.errors import PasteUnavailableError
 
 
 @pytest.fixture(autouse=True)
 def _stub_pynput_keyboard(monkeypatch):
     # Real pynput eagerly loads a platform backend at import time (xorg on Linux),
     # which fails on headless CI. Stub the module so these tests exercise only
-    # dictate.paste's logic.
+    # private_dictate.paste's logic.
     fake_keyboard = types.ModuleType("pynput.keyboard")
     fake_keyboard.Controller = MagicMock
     fake_keyboard.Key = types.SimpleNamespace(
@@ -52,7 +52,7 @@ def test_paste_pynput_success_presses_ctrl_v():
 
 
 def test_paste_wayland_shells_out_to_ydotool():
-    with patch("dictate.paste.subprocess.run") as run:
+    with patch("private_dictate.paste.subprocess.run") as run:
         run.return_value.returncode = 0
         be = WaylandYdotoolBackend()
         be.paste("ctrl+v")
@@ -61,7 +61,7 @@ def test_paste_wayland_shells_out_to_ydotool():
 
 
 def test_paste_wayland_missing_ydotool_raises_unavailable():
-    with patch("dictate.paste.subprocess.run", side_effect=FileNotFoundError):
+    with patch("private_dictate.paste.subprocess.run", side_effect=FileNotFoundError):
         be = WaylandYdotoolBackend()
         with pytest.raises(PasteUnavailableError):
             be.paste("ctrl+v")

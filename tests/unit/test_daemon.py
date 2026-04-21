@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from dictate.config import Config
+from private_dictate.config import Config
 
 _posix_only = pytest.mark.skipif(
     sys.platform == "win32", reason="Daemon uses POSIX-only signals (SIGHUP/SIGUSR1)"
@@ -19,14 +19,14 @@ def test_daemon_wires_components_and_writes_pid(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))
     monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path / "data"))
 
-    with patch("dictate.daemon.Transcriber") as T, \
-         patch("dictate.daemon.Recorder") as R, \
-         patch("dictate.daemon.HotkeyListener") as HK:
+    with patch("private_dictate.daemon.Transcriber") as T, \
+         patch("private_dictate.daemon.Recorder") as R, \
+         patch("private_dictate.daemon.HotkeyListener") as HK:
         T.return_value = MagicMock(device="cpu", compute_type="int8", last_error=None)
-        from dictate.daemon import Daemon
+        from private_dictate.daemon import Daemon
         d = Daemon(cfg=Config())
         d.setup()
-        pid_file = tmp_path / "cache" / "dictate" / "dictate.pid"
+        pid_file = tmp_path / "cache" / "private-dictate" / "private-dictate.pid"
         assert pid_file.exists()
         T.assert_called_once()
         R.assert_called_once()
@@ -39,13 +39,13 @@ def test_sigusr1_forwards_to_external_toggle(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))
     monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path / "data"))
 
-    with patch("dictate.daemon.Transcriber") as T, \
-         patch("dictate.daemon.Recorder"), \
-         patch("dictate.daemon.HotkeyListener") as HK:
+    with patch("private_dictate.daemon.Transcriber") as T, \
+         patch("private_dictate.daemon.Recorder"), \
+         patch("private_dictate.daemon.HotkeyListener") as HK:
         T.return_value = MagicMock(device="cpu", compute_type="int8", last_error=None)
         hk_instance = MagicMock()
         HK.return_value = hk_instance
-        from dictate.daemon import Daemon
+        from private_dictate.daemon import Daemon
         d = Daemon(cfg=Config())
         d.setup()
         d._handle_sigusr1(0, None)
