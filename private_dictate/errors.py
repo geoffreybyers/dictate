@@ -1,25 +1,25 @@
-"""Typed exceptions used across dictate."""
+"""Typed exceptions used across PrivateDictate."""
 
 
-class DictateError(Exception):
-    """Base class for all dictate errors."""
+class PrivateDictateError(Exception):
+    """Base class for all PrivateDictate errors."""
 
 
-class ConfigError(DictateError):
+class ConfigError(PrivateDictateError):
     """Invalid or unparseable configuration."""
 
 
-class AudioError(DictateError):
+class AudioError(PrivateDictateError):
     """Microphone / recording failed."""
 
 
-class TranscriptionError(DictateError):
+class TranscriptionError(PrivateDictateError):
     """Transcription pipeline failed."""
 
 
-class QueueOverflowError(DictateError):
+class QueueOverflowError(PrivateDictateError):
     """Transcription queue exceeded max depth."""
 
 
-class PasteUnavailableError(DictateError):
+class PasteUnavailableError(PrivateDictateError):
     """Auto-paste backend unavailable on this platform."""

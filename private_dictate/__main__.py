@@ -1,5 +1,5 @@
-"""Allow `python -m dictate` as a daemon alias."""
-from dictate.cli import main
+"""Allow `python -m private_dictate` as a daemon alias."""
+from private_dictate.cli import main
 import sys
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ import subprocess
 import sys
 from typing import Protocol
 
-from dictate.errors import PasteUnavailableError
+from private_dictate.errors import PasteUnavailableError
 
 log = logging.getLogger(__name__)
 

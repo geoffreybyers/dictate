@@ -10,8 +10,8 @@ from textual.containers import Vertical, Horizontal
 from textual.widget import Widget
 from textual.widgets import Static, Input, Switch, Select, Button, Label
 
-from dictate import paths
-from dictate.config import (
+from private_dictate import paths
+from private_dictate.config import (
     Config, load as load_cfg, save as save_cfg,
     _HOTKEY_MODES, _MODEL_SIZES, _DEVICES, _COMPUTE_TYPES,
     _PASTE_SHORTCUTS, _LOG_LEVELS, _THEMES,
@@ -149,7 +149,7 @@ class SettingsScreen(Widget):
         self.app.action_jump("settings")
 
     def _signal_daemon(self) -> None:
-        pid_path = paths.cache_dir() / "dictate.pid"
+        pid_path = paths.cache_dir() / "private-dictate.pid"
         if not pid_path.exists():
             return
         try:

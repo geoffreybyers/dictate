@@ -8,7 +8,7 @@ from textual.containers import Vertical
 from textual.widget import Widget
 from textual.widgets import Static
 
-from dictate import paths
+from private_dictate import paths
 
 
 class HistoryScreen(Widget):
