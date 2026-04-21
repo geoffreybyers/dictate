@@ -1,6 +1,6 @@
 # Security
 
-dictate processes audio locally — nothing leaves your machine by default. Please report security issues privately to the maintainer (see README for contact) rather than opening a public GitHub issue.
+PrivateDictate processes audio locally — nothing leaves your machine by default. Please report security issues privately to the maintainer (see README for contact) rather than opening a public GitHub issue.
 
 ## Threat model
 

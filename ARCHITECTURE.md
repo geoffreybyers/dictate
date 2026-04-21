@@ -1,12 +1,12 @@
-# dictate — Architecture
+# PrivateDictate — Architecture
 
 ## Overview
 
-dictate is a privacy-first speech-to-text tool. Two Python processes cooperate via files on disk and POSIX signals: the **daemon** (hotkey + audio + transcription + clipboard) and the **TUI** (Textual; status / settings / history).
+PrivateDictate is a privacy-first speech-to-text tool. Two Python processes cooperate via files on disk and POSIX signals: the **daemon** (hotkey + audio + transcription + clipboard) and the **TUI** (Textual; status / settings / history).
 
 ## Processes
 
-**Daemon (`dictate`)**
+**Daemon (`private-dictate`)**
 - Loads the faster-whisper model at startup.
 - Listens for the configured global hotkey via pynput.
 - Captures audio with sounddevice on press, stops on release.
@@ -14,7 +14,7 @@ dictate is a privacy-first speech-to-text tool. Two Python processes cooperate v
 - Writes the result to the clipboard, optionally auto-pastes, and appends to history.
 - Reloads config on `SIGHUP`; toggles recording on `SIGUSR1`; clean exit on `SIGTERM`/`SIGINT`.
 
-**TUI (`dictate tui`)**
+**TUI (`private-dictate tui`)**
 - Textual app. Three screens: Status, Settings, History.
 - Reads `config.toml`, `status.json`, `history.jsonl`.
 - Polls `status.json` at 10 Hz for the live footer.
@@ -25,11 +25,11 @@ dictate is a privacy-first speech-to-text tool. Two Python processes cooperate v
 
 | File | Writer | Readers | Purpose |
 |---|---|---|---|
-| `~/.config/dictate/config.toml` | TUI, user | daemon | Settings. |
-| `~/.cache/dictate/status.json` | daemon | TUI, user scripts | Runtime state. |
-| `~/.local/share/dictate/history.jsonl` | daemon | TUI | Transcription history. |
-| `~/.local/share/dictate/dictate.log` | daemon | user | Rotating log. |
-| `~/.cache/dictate/dictate.pid` | daemon | TUI, signal CLIs | PID + start timestamp. |
+| `~/.config/private-dictate/config.toml` | TUI, user | daemon | Settings. |
+| `~/.cache/private-dictate/status.json` | daemon | TUI, user scripts | Runtime state. |
+| `~/.local/share/private-dictate/history.jsonl` | daemon | TUI | Transcription history. |
+| `~/.local/share/private-dictate/private-dictate.log` | daemon | user | Rotating log. |
+| `~/.cache/private-dictate/private-dictate.pid` | daemon | TUI, signal CLIs | PID + start timestamp. |
 
 ## Signal contract
 
@@ -46,15 +46,15 @@ dictate is a privacy-first speech-to-text tool. Two Python processes cooperate v
 ## Platform notes
 
 - **Linux X11**: push-to-talk via pynput. Clipboard via pyperclip. Auto-paste via pynput.
-- **Linux Wayland**: hotkey not exposed to apps. User binds `dictate toggle` in their compositor. Sway/i3 `bindsym --release` can recover push-to-talk. Auto-paste via `ydotool`.
+- **Linux Wayland**: hotkey not exposed to apps. User binds `private-dictate toggle` in their compositor. Sway/i3 `bindsym --release` can recover push-to-talk. Auto-paste via `ydotool`.
 - **macOS**: pynput (needs Accessibility permission). No portal plumbing.
 - **Windows**: pynput. No special setup.
 
 ## Module map
 
 ```
-dictate/
-├── __main__.py     python -m dictate → daemon
+private_dictate/
+├── __main__.py     python -m private_dictate → daemon
 ├── cli.py          argparse dispatch (daemon / tui / toggle / start / stop)
 ├── daemon.py       Main loop, signal handlers, orchestration
 ├── config.py       TOML load/save, defaults, validation
