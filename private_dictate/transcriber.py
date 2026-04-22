@@ -22,6 +22,9 @@ class TranscriptionResult:
     confidence: float
 
 
+_CPU_SAFE_COMPUTE_TYPES = {"int8", "int8_float32", "float32"}
+
+
 def _resolve_compute_type(device: str, requested: str) -> str:
     if requested != "auto":
         return requested
@@ -65,6 +68,8 @@ class Transcriber:
                 self.last_error = msg
                 device = "cpu"
                 resolved_compute = _resolve_compute_type(device, compute_type)
+                if resolved_compute not in _CPU_SAFE_COMPUTE_TYPES:
+                    resolved_compute = "int8"
                 self._model = WhisperModel(
                     size,
                     device=device,

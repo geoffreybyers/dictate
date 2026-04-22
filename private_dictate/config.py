@@ -22,7 +22,8 @@ mode = "hold"                # "hold" | "toggle"
 [model]
 size          = "small"      # "small" | "medium"             [restart]
 device        = "auto"       # "auto" | "cpu" | "cuda"        [restart]
-compute_type  = "auto"       # "auto" | "int8" | "float16" | "int8_float16"
+compute_type  = "auto"       # "auto" | "int8" | "int8_float32" | "float32" | "float16" | "int8_float16"
+                             # float16/int8_float16 need CUDA + cuDNN; int8/int8_float32/float32 work on CPU too.
 cache_dir     = ""
 
 [transcription]
@@ -107,7 +108,7 @@ class Config:
 _HOTKEY_MODES = {"hold", "toggle"}
 _MODEL_SIZES = {"small", "medium"}
 _DEVICES = {"auto", "cpu", "cuda"}
-_COMPUTE_TYPES = {"auto", "int8", "float16", "int8_float16"}
+_COMPUTE_TYPES = {"auto", "int8", "int8_float32", "float32", "float16", "int8_float16"}
 _PASTE_SHORTCUTS = {"ctrl+v", "ctrl+shift+v"}
 _LOG_LEVELS = {"debug", "info", "warn", "error"}
 _THEMES = {"auto", "dark", "light"}

@@ -72,3 +72,39 @@ def test_cpu_init_failure_raises():
     with patch("private_dictate.transcriber.WhisperModel", side_effect=RuntimeError("boom")):
         with pytest.raises(RuntimeError):
             Transcriber(size="small", device="cpu", compute_type="int8")
+
+
+@pytest.mark.parametrize("gpu_only_type", ["float16", "int8_float16"])
+def test_cuda_fallback_substitutes_int8_for_gpu_only_compute_type(gpu_only_type):
+    """When CUDA fails, CPU fallback must not re-use a GPU-only compute type."""
+    calls = []
+
+    def fake_wm(size, device, compute_type, download_root):
+        calls.append((device, compute_type))
+        if device == "cuda":
+            raise RuntimeError(f"device does not support {compute_type}")
+        return MagicMock()
+
+    with patch("private_dictate.transcriber.WhisperModel", side_effect=fake_wm):
+        t = Transcriber(size="small", device="cuda", compute_type=gpu_only_type)
+    assert calls[0] == ("cuda", gpu_only_type)
+    assert calls[1] == ("cpu", "int8")
+    assert t.device == "cpu"
+    assert t.compute_type == "int8"
+    assert t.last_error is not None
+
+
+def test_cuda_fallback_preserves_cpu_safe_compute_type():
+    """An explicit CPU-safe compute_type must survive the CUDA→CPU fallback."""
+    calls = []
+
+    def fake_wm(size, device, compute_type, download_root):
+        calls.append((device, compute_type))
+        if device == "cuda":
+            raise RuntimeError("CUDA init failed")
+        return MagicMock()
+
+    with patch("private_dictate.transcriber.WhisperModel", side_effect=fake_wm):
+        t = Transcriber(size="small", device="cuda", compute_type="int8_float32")
+    assert calls == [("cuda", "int8_float32"), ("cpu", "int8_float32")]
+    assert t.compute_type == "int8_float32"
