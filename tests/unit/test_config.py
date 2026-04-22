@@ -45,6 +45,17 @@ def test_save_atomic_temp_plus_rename(tmp_path: Path):
     assert list(tmp_path.iterdir()) == [path]
 
 
+@pytest.mark.parametrize("compute_type", ["int8", "float16", "int8_float16", "float32", "int8_float32"])
+def test_compute_type_accepts_cpu_and_no_cudnn_variants(tmp_path: Path, compute_type):
+    path = tmp_path / "config.toml"
+    path.write_text(f"""
+[model]
+compute_type = "{compute_type}"
+""")
+    cfg = load(path)
+    assert cfg.model.compute_type == compute_type
+
+
 def test_invalid_toml_falls_back_and_logs(tmp_path: Path, caplog):
     path = tmp_path / "config.toml"
     path.write_text("this is not = = valid toml [")
